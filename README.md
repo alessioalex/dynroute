@@ -46,19 +46,19 @@ secretAccessKey = bbbbbbbbbbbbbbbbbbbbbLwccccembeMdddddI4e
 ### Update now & exit
 
 ```bash
-dyndns -d home.mydomain.com --once
+dynroute -d home.mydomain.com --once
 ```
 
 ### Leave script open to check for updated every X seconds
 
 ```bash
-dyndns -d home.mydomain.com
+dynroute -d home.mydomain.com
 ```
 
 By default the script will check every 60 seconds if your ip updated, but you can customize that:
 
 ```bash
-dyndns -d home.mydomain.com --time 120
+dynroute -d home.mydomain.com --time 120
 ```
 
 ## License
