@@ -4,7 +4,7 @@
   "version"    : "0.1.0",
   "homepage"   : "http://github.com/alessioalex/dynroute",
   "author"     : "Alexandru Vladutu <alexandru.vladutu@gmail.com>",
-  "main"       : "./index.js",
+  "main"       : "./dynroute.js",
   "bin"        : { "dynroute" : "./bin/dynroute" },
   "keywords"   : [
     "dyndns",
@@ -29,12 +29,5 @@
     "nomnom"    : "1.5.x",
     "request"   : "2.12.x",
     "underscore": "1.4.x"
-  },
-  "devDependencies" : {
-    "mocha" : "1.7.x",
-    "should": "0.6.x"
-  },
-  "scripts" : {
-    "test" : "./node_modules/.bin/mocha --slow 2000 --timeout 10s --reporter spec --require should test/logit.js test/MongoStore.js test/FileStore.js"
   }
 }
