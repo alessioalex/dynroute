@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var opts       = require('nomnom'),
+    utils      = require('../lib/utils'),
+    dynroute   = require('../dynroute'),
+    configFile = process.env.HOME + '/.awsrc';
+
+opts = opts.script('dynroute')
+  .option('domain', {
+    abbr     : 'd',
+    required : true,
+    help     : 'Domain to update [required]'
+  })
+  .option('ttl', {
+    abbr    : 'ttl',
+    default : 60,
+    help    : 'Time To Leave (in seconds) [default: 60]'
+  })
+  .option('time', {
+    abbr    : 't',
+    default : 60,
+    help    : 'How frequently to check for IP update [default: 60]'
+  })
+  .option('once', {
+    abbr    : 'o',
+    flag    : true,
+    default : false,
+    help    : 'Check for IP update ONLY ONCE and exit [default: false]'
+  })
+  .option('growl', {
+    abbr    : 'g',
+    flag    : true,
+    default : false,
+    help    : 'Display growl notification after IP update [default: false]'
+  })
+  .option('awskeys', {
+    abbr    : 'aws',
+    default : process.env.HOME + '/.awsrc',
+    help    : 'The path for the config file containing AWS credentials [default ~/.awsrc]'
+  })
+  .option('ipserver', {
+    abbr    : 'ipserv',
+    default : 'http://whatismyip.nodejitsu.com/index.json',
+    help    : 'Resp: { ip: "YOUR_IP_HERE" } [default http://whatismyip.nodejitsu.com/index.json]'
+  })
+  .option('debug', {
+    abbr : 'dbg',
+    flag : true,
+    help : "Print debugging info"
+  })
+  .option('version', {
+    abbr     : 'v',
+    flag     : true,
+    help     : 'Print version and exit',
+    callback : function() {
+      return "0.1.0";
+    }
+  })
+  .parse();
+
+if (opts.debug) {
+  utils.debugBlock('Command Line Options', opts);
+}
+
+// this fn doesn't have an error param, it will exit by itself in that case
+utils.parseConfigFile(configFile, opts.debug, function(awsCredentials) {
+  if (opts.debug) {
+    utils.debugBlock('Read AWS Credentials', awsCredentials);
+  }
+
+  dynroute(awsCredentials, opts);
+
+  if (!opts.once) {
+    setInterval(function() {
+      dynroute(awsCredentials, opts);
+    }, opts.time * 1000);
+  }
+});
