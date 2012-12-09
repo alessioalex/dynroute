@@ -61,6 +61,20 @@ By default the script will check every 60 seconds if your ip updated, but you ca
 dynroute -d home.mydomain.com --time 120
 ```
 
+### Growl
+
+  You can setup Growl notifications to let you know when your IP has been updated for your domain.
+
+  Ex:
+
+```bash
+dynroute -d localhost.mydomain.com --growl
+```
+
+### What if record doesn't exist for that domain?
+
+  If there is no A record for that hosted zone that matches your request the script will automatically create one.
+
 ## License
 
 >(The MIT License)
