@@ -71,7 +71,7 @@ dynroute -d home.mydomain.com --time 120
 dynroute -d localhost.mydomain.com --growl
 ```
 
-### What if record doesn't exist for that domain?
+### What if the record doesn't exist for that domain?
 
   If there is no A record for that hosted zone that matches your request the script will automatically create one.
 
