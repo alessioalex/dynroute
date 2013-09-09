@@ -1,5 +1,5 @@
 {
-  "name"       : "DynRoute",
+  "name"       : "dynroute",
   "description": "Dynamic DNS for your domain using Amazon Route53",
   "version"    : "0.1.1",
   "homepage"   : "http://github.com/alessioalex/dynroute",
