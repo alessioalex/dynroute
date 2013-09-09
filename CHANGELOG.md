@@ -1,3 +1,7 @@
+## 1.2.2 release
+
+- Removed a debug message when no debug flag is set
+
 ## 1.2.1 release
 
 - Fixed bug with selecting wrong domain (if domain is not the 1st)

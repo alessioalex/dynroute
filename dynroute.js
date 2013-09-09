@@ -115,10 +115,12 @@ function searchRecord(ip) {
 function updateDns(ip, details) {
   var args, oldIps;
 
-  utils.debugBlock('updateDns() called', {
-    ip      : ip,
-    details : details
-  });
+  if (opts.debug) {
+    utils.debugBlock('updateDns() called', {
+      ip      : ip,
+      details : details
+    });
+  }
 
   args = {
     HostedZoneId: '/' + details.zoneId,
@@ -219,6 +221,11 @@ function checkIpUpdate(credentials, configs) {
     if (!error && response.statusCode == 200) {
       try {
         ip = JSON.parse(body.trim()).ip;
+
+        if (opts.debug) {
+          utils.debugBlock('Your IP', ip);
+        }
+
         // no point in querying Route53 if we know the last ip is correct right?
         if (ip !== lastKnownIP) {
           searchRecord(ip);
@@ -232,6 +239,10 @@ function checkIpUpdate(credentials, configs) {
         if (opts.debug) {
           utils.debugBlock('Error getting ip from server', err);
         }
+      }
+    } else {
+      if (opts.debug) {
+        utils.debugBlock('Error getting ip from server', error, response.statusCode);
       }
     }
   });
