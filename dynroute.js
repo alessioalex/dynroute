@@ -97,13 +97,13 @@ function searchRecord(ip) {
           // and check for the root domain
 
           hostedZones.forEach(function(zone) {
-            if (opts.domain.indexOf(zone.name)) {
+            if (opts.domain.indexOf(zone.name) > -1) {
               rootZone = zone;
             }
           });
 
           return updateDns(ip, {
-            zoneId : zone.id
+            zoneId : rootZone.id
           });
         }
       }(zones.length - 1));
@@ -114,6 +114,11 @@ function searchRecord(ip) {
 
 function updateDns(ip, details) {
   var args, oldIps;
+
+  utils.debugBlock('updateDns() called', {
+    ip      : ip,
+    details : details
+  });
 
   args = {
     HostedZoneId: '/' + details.zoneId,
@@ -189,7 +194,7 @@ function updateDns(ip, details) {
       ((data.Body.ChangeResourceRecordSetsResponse.ChangeInfo.Status === 'PENDING') ||
       (data.Body.ChangeResourceRecordSetsResponse.ChangeInfo.Status === 'CREATE'))) {
 
-      if (opts.debug) {
+      if (opts.debug && opts.growl) {
         utils.debugBlock('IP change successful', 'Sending growl notification');
       }
 
@@ -200,7 +205,7 @@ function updateDns(ip, details) {
       lastKnownIP = ip;
     }
   });
-}
+};
 
 function checkIpUpdate(credentials, configs) {
   opts = configs;
@@ -230,6 +235,6 @@ function checkIpUpdate(credentials, configs) {
       }
     }
   });
-}
+};
 
 module.exports = checkIpUpdate;

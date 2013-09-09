@@ -44,8 +44,8 @@ opts = opts.script('dynroute')
   })
   .option('ipserver', {
     abbr    : 'ipserv',
-    default : 'http://whatismyip.nodejitsu.com/index.json',
-    help    : 'Resp: { ip: "YOUR_IP_HERE" } [default http://whatismyip.nodejitsu.com/index.json]'
+    default : 'http://ip-address.herokuapp.com/ip.json',
+    help    : 'Resp: { ip: "YOUR_IP_HERE" } [default http://ip-address.herokuapp.com/ip.json]'
   })
   .option('debug', {
     abbr : 'dbg',
@@ -67,7 +67,7 @@ if (opts.debug) {
 }
 
 // this fn doesn't have an error param, it will exit by itself in that case
-utils.parseConfigFile(configFile, opts.debug, function(awsCredentials) {
+utils.parseConfigFile(opts.awskeys, opts.debug, function(awsCredentials) {
   if (opts.debug) {
     utils.debugBlock('Read AWS Credentials', awsCredentials);
   }

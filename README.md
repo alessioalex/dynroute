@@ -22,7 +22,7 @@ Options:
    -o, --once            Check for IP update ONLY ONCE and exit [default: false]
    -g, --growl           Display growl notification after IP update [default: false]
    -aws, --awskeys       The path for the config file containing AWS credentials [default ~/.awsrc]
-   -ipserv, --ipserver   Resp: { ip: "YOUR_IP_HERE" } [default http://whatismyip.nodejitsu.com/index.json]
+   -ipserv, --ipserver   Resp: { ip: "YOUR_IP_HERE" } [default http://ip-address.herokuapp.com/ip.json]
    -dbg, --debug         Print debugging info
    -v, --version         Print version and exit
 ```
