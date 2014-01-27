@@ -45,6 +45,9 @@ function searchRecord(ip) {
         records = _.filter(records, function(record) {
           return record.Type === 'A';
         });
+	records.forEach(function(record, index, records){
+		records[index].Name = record.Name.replace(/\\052/g, '*');
+	});
 
         resp = {
           id      : zone.id,
