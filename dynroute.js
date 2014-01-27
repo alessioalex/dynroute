@@ -45,9 +45,9 @@ function searchRecord(ip) {
         records = _.filter(records, function(record) {
           return record.Type === 'A';
         });
-	records.forEach(function(record, index, records){
-		records[index].Name = record.Name.replace(/\\052/g, '*');
-	});
+      	records.forEach(function(record, index, records){
+      		records[index].Name = record.Name.replace(/\\052/g, '*');
+      	});
 
         resp = {
           id      : zone.id,
@@ -67,49 +67,60 @@ function searchRecord(ip) {
       if (opts.debug) {
         utils.debugBlock('Zones with A records', zones);
       }
-
-      (function iterate(iterator) {
-        var zone, i, len, record, rootZone;
-
-        zone = zones[iterator];
-
-        // current zone has A type records, iterate through them until
-        // domain is found
-        if (zone.records.length) {
-          // TODO: make simple forEach async
-          for (i = 0, len = zone.records.length; i < len; i++) {
-            if (zone.records[i].Name === (opts.domain + '.')) {
-              return updateDns(ip, {
-                zoneId : zone.id,
-                record : zone.records[i]
-              });
-            }
-          }
-        }
-
-        // proceed to next zone from the array
-        if (iterator) {
-          process.nextTick(function() {
-            iterate(--iterator);
-          });
-        } else {
+      
+      for (j = 0; j < opts.domain.length; j++) {
+        
+        (function iterate(domain, iterator) {
+          
           if (opts.debug) {
-            utils.debugBlock("Record doesn't exist, create it", hostedZones);
+            utils.debugBlock('Iterating Domain', domain);
           }
-          // no such record was found, iterate through hostedZones
-          // and check for the root domain
+          var zone, i, len, record, rootZone;
 
-          hostedZones.forEach(function(zone) {
-            if (opts.domain.indexOf(zone.name) > -1) {
-              rootZone = zone;
+          zone = zones[iterator];
+
+          // current zone has A type records, iterate through them until
+          // domain is found
+          if (zone.records.length) {
+            // TODO: make simple forEach async
+            for (i = 0, len = zone.records.length; i < len; i++) {
+              if (zone.records[i].Name === (domain + '.')) {
+                return updateDns(ip, {
+                  zoneId : zone.id,
+                  record : zone.records[i]
+                });
+              }
             }
-          });
+          }
 
-          return updateDns(ip, {
-            zoneId : rootZone.id
-          });
-        }
-      }(zones.length - 1));
+          // proceed to next zone from the array
+          if (iterator) {
+            process.nextTick(function() {
+              iterate(domain, --iterator);
+            });
+          } else {
+            if (opts.debug) {
+              utils.debugBlock("Record doesn't exist, create it", hostedZones);
+            }
+            // no such record was found, iterate through hostedZones
+            // and check for the root domain
+
+            hostedZones.forEach(function(zone) {
+              if (domain.indexOf(zone.name) > -1) {
+                rootZone = zone;
+              }
+            });
+            
+            if (opts.debug) {
+              utils.debugBlock('RootZone', domain, rootZone, zone);
+            }
+          
+            return updateDns(ip, {
+              zoneId : rootZone.id
+            });
+          }
+        }(opts.domain[j], zones.length - 1));
+      }
     });
 
   });
@@ -127,7 +138,8 @@ function updateDns(ip, details) {
 
   args = {
     HostedZoneId: '/' + details.zoneId,
-    Comment: 'Updated local ip at: ' + Date.now()
+    Comment: 'Updated local ip at: ' + Date.now(),
+    Changes: []
   };
 
   // if record already exists in Route53 - delete & re-create it
@@ -150,34 +162,23 @@ function updateDns(ip, details) {
       return;
     }
 
-    args.Changes = [
-      {
-        Action          : 'DELETE',
-        Name            : opts.domain,
-        Type            : 'A',
-        Ttl             : details.record.TTL,
-        ResourceRecords : oldIps
-      },
-      {
-        Action          : 'CREATE',
-        Name            : opts.domain,
-        Type            : 'A',
-        Ttl             : opts.ttl,
-        ResourceRecords : [ip]
-      }
-    ];
-  } else {
-    // record doesn't exist in Route53, create it
-    args.Changes = [
-      {
-        Action          : 'CREATE',
-        Name            : opts.domain,
-        Type            : 'A',
-        Ttl             : opts.ttl,
-        ResourceRecords : [ip]
-      }
-    ];
+    args.Changes.push({
+      Action          : 'DELETE',
+      Name            : details.record.Name,
+      Type            : 'A',
+      Ttl             : details.record.TTL,
+      ResourceRecords : oldIps
+    });
   }
+  
+  // Record either doesnt exist or has been deleted, create it
+  args.Changes.push({
+      Action          : 'CREATE',
+      Name            : details.record.Name,
+      Type            : 'A',
+      Ttl             : opts.ttl,
+      ResourceRecords : [ip]
+    });
 
   if (opts.debug) {
     utils.debugBlock('Sent ip change request to Route53', args);
@@ -204,7 +205,7 @@ function updateDns(ip, details) {
       }
 
       if (opts.growl) {
-        growl(opts.domain + ' : ' + ip, { title: 'Dynamic DNS Update' });
+        growl(details.record.Name + ' : ' + ip, { title: 'Dynamic DNS Update' });
       }
 
       lastKnownIP = ip;
