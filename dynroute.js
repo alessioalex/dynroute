@@ -85,7 +85,7 @@ function searchRecord(ip) {
             // TODO: make simple forEach async
             for (i = 0, len = zone.records.length; i < len; i++) {
               if (zone.records[i].Name === (domain + '.')) {
-                return updateDns(ip, {
+                return updateDns(ip, domain, {
                   zoneId : zone.id,
                   record : zone.records[i]
                 });
@@ -115,7 +115,7 @@ function searchRecord(ip) {
               utils.debugBlock('RootZone', domain, rootZone, zone);
             }
           
-            return updateDns(ip, {
+            return updateDns(ip, domain, {
               zoneId : rootZone.id
             });
           }
@@ -126,7 +126,7 @@ function searchRecord(ip) {
   });
 }
 
-function updateDns(ip, details) {
+function updateDns(ip, domain, details) {
   var args, oldIps;
 
   if (opts.debug) {
@@ -174,7 +174,7 @@ function updateDns(ip, details) {
   // Record either doesnt exist or has been deleted, create it
   args.Changes.push({
       Action          : 'CREATE',
-      Name            : details.record.Name,
+      Name            : domain,
       Type            : 'A',
       Ttl             : opts.ttl,
       ResourceRecords : [ip]
