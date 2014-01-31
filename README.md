@@ -75,6 +75,11 @@ dynroute -d localhost.mydomain.com --growl
 
   If there is no A record for that hosted zone that matches your request the script will automatically create one.
 
+## Contributors
+
+- Alexandru Vladutu
+- Jon Hazan (https://github.com/hazanjon)
+
 ## License
 
 >(The MIT License)
