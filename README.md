@@ -16,7 +16,7 @@ dynroute -h
 Usage: dynroute [options]
 
 Options:
-   -d, --domain          Domain to update [required]
+   -d, --domain          Domain(s) to update [required] (you can specify multiple domains, ex: -d ro.domain.com -d en.domain.com)
    -ttl, --ttl           Time To Leave (in seconds) [default: 60]
    -t, --time            How frequently to check for IP update [default: 60]
    -o, --once            Check for IP update ONLY ONCE and exit [default: false]

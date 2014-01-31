@@ -13,7 +13,7 @@ opts = opts.script('dynroute')
   .option('domain', {
     abbr     : 'd',
     required : true,
-    help     : 'Domain to update [required]',
+    help     : 'Domain(s) to update [required]',
     list: true
   })
   .option('ttl', {
