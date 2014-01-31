@@ -205,7 +205,7 @@ function updateDns(ip, domain, details) {
       }
 
       if (opts.growl) {
-        growl(details.record.Name + ' : ' + ip, { title: 'Dynamic DNS Update' });
+        growl(domain + ' : ' + ip, { title: 'Dynamic DNS Update' });
       }
 
       lastKnownIP = ip;
