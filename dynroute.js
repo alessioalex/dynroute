@@ -75,7 +75,7 @@ function searchRecord(ip) {
           if (opts.debug) {
             utils.debugBlock('Iterating Domain', domain);
           }
-          var zone, i, len, record, rootZone, patt;
+          var zone, i, len, record, rootZone;
 
           // validating domain
           if (!utils.isValidDomain(domain)) {
@@ -165,7 +165,7 @@ function updateDns(ip, domain, details) {
       lastKnownIP = ip;
 
       if (opts.debug) {
-        utils.debugBlock('Ip unchanged', 'No request sent!')
+        utils.debugBlock('Ip unchanged', 'No request sent!');
       }
 
       return;
