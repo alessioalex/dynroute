@@ -75,7 +75,16 @@ function searchRecord(ip) {
           if (opts.debug) {
             utils.debugBlock('Iterating Domain', domain);
           }
-          var zone, i, len, record, rootZone;
+          var zone, i, len, record, rootZone, patt;
+
+          // validating domain
+          if (!utils.isValidDomain(domain)) {
+            if (opts.debug) {
+              utils.debugBlock('Error validating domain name', domain);
+            }
+            utils.print('Correct domain name form: domain.tld, subdomain.domain.tld, or any number of additional subdomains.');
+            utils.exit('Error validating domain name');
+          }
 
           zone = zones[iterator];
 
