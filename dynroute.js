@@ -77,6 +77,15 @@ function searchRecord(ip) {
           }
           var zone, i, len, record, rootZone;
 
+          // validating domain
+          if (!utils.isValidDomain(domain)) {
+            if (opts.debug) {
+              utils.debugBlock('Error validating domain name', domain);
+            }
+            utils.print('Correct domain name form: domain.tld, subdomain.domain.tld, or any number of additional subdomains.');
+            utils.exit('Error validating domain name');
+          }
+
           zone = zones[iterator];
 
           // current zone has A type records, iterate through them until
@@ -156,7 +165,7 @@ function updateDns(ip, domain, details) {
       lastKnownIP = ip;
 
       if (opts.debug) {
-        utils.debugBlock('Ip unchanged', 'No request sent!')
+        utils.debugBlock('Ip unchanged', 'No request sent!');
       }
 
       return;
