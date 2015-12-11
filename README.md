@@ -43,6 +43,29 @@ accessKeyId     = AAAAAAAAAAAAAAAAAAAA
 secretAccessKey = bbbbbbbbbbbbbbbbbbbbbLwccccembeMdddddI4e
 ```
 
+Note that you might want to create another AWS user has CRUD rights for Route53 and use that instead of the admin account. Here's a sample AWS user policy:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ListHostedZones",
+                "route53:ListResourceRecordSets",
+                "route53:ChangeResourceRecordSets",
+                "route53:CreateHostedZone",
+                "route53domains:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+```
+
 ### Update now & exit
 
 ```bash
