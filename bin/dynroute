@@ -16,6 +16,11 @@ opts = opts.script('dynroute')
     help     : 'Domain(s) to update [required]',
     list: true
   })
+  .option('zone', {
+    abbr     : 'z',
+    required : false,
+    help     : 'Route 53 Zone ID that the domain lives in [default: searches all zones for domain]'
+  })
   .option('ttl', {
     abbr    : 'ttl',
     default : 60,

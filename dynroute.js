@@ -36,6 +36,15 @@ function searchRecord(ip) {
     }
 
     async.map(hostedZones, function(zone, callback) {
+      // skip listing record sets and return an empty array unless we care about this specific zone
+      if (opts.zone && opts.zone !== zone.id) {
+        callback(null, {
+          id: zone.id,
+          records: []
+        });
+        return;
+      }
+
       r53.ListResourceRecordSets({ HostedZoneId : zone.id }, function(err, data) {
         var resp, records;
 
