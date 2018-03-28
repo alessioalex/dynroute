@@ -50,8 +50,8 @@ opts = opts.script('dynroute')
   })
   .option('ipserver', {
     abbr    : 'ipserv',
-    default : 'http://ip-address.herokuapp.com/ip.json',
-    help    : 'Resp: { ip: "YOUR_IP_HERE" } [default http://ip-address.herokuapp.com/ip.json]'
+    default : 'https://api.ipify.org?format=json',
+    help    : 'Resp: { ip: "YOUR_IP_HERE" } [default https://api.ipify.org?format=json]'
   })
   .option('debug', {
     abbr : 'dbg',
