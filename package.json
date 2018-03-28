@@ -1,7 +1,7 @@
 {
   "name"       : "dynroute",
   "description": "Dynamic DNS for your domain using Amazon Route53",
-  "version"    : "0.1.3",
+  "version"    : "0.1.4",
   "homepage"   : "http://github.com/alessioalex/dynroute",
   "author"     : "Alexandru Vladutu <alexandru.vladutu@gmail.com>",
   "main"       : "./dynroute.js",
